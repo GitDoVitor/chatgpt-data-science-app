@@ -15,10 +15,13 @@ def send_message(message):
 
 st.set_page_config(page_title="Gerar Insights", page_icon="👀", layout="wide", initial_sidebar_state="collapsed")
 
-
-#### SIDE BAR ####
-with st.sidebar:  
-    st.markdown("###### Desenvolvido por [João Vitor](https://github.com/GitDoVitor)")
+# Hide Sidebar
+no_sidebar_style = """
+    <style>
+        div[data-testid="stSidebarNav"] {display: none;}
+    </style>
+"""
+st.markdown(no_sidebar_style, unsafe_allow_html=True)
 
 
 #### MAIN PAGE ####
@@ -26,6 +29,11 @@ st.title("Gere Insights ou ideias para análises com apenas um clique! 👀")
 st.write("A ideia é facilitar a vida de quem precisa de insights para análises de dados, mas não tem ideia de onde começar. Para isso, basta fazer o upload de um arquivo .csv contendo os dados que você deseja analisar e pronto! O sistema irá gerar uma série de dicas para te ajudar a ter ideias de como analisar os dados. 😁")
 
 st.divider()
+OPENAI_API_KEY= st.text_input("Digite sua API Key do OpenAI aqui:")
+
+client = OpenAI(
+    api_key=OPENAI_API_KEY
+)
 
 csv = st.file_uploader("Faça o upload do seu arquivo .csv aqui:", type=["csv"])
 
@@ -33,12 +41,7 @@ if not csv:
     st.warning("Por favor, faça o upload do seu arquivo .csv para continuar.")
 elif csv:
     st.success("Arquivo .csv carregado com sucesso! 🎉")
-    
-    OPENAI_API_KEY= st.text_input("Digite sua API Key do OpenAI aqui:")
 
-    client = OpenAI(
-        api_key=OPENAI_API_KEY
-    )
     col1, col2 = st.columns(2)
     with col1:
         df_divider = st.selectbox("Qual o tipo de separador utilizado no seu arquivo?", [",", ";"])
