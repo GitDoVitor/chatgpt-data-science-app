@@ -1,16 +1,6 @@
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
-
-client = OpenAI(
-    api_key=OPENAI_API_KEY
-)
 
 def send_message(message):    
     response = client.chat.completions.create(
@@ -43,6 +33,12 @@ if not csv:
     st.warning("Por favor, faça o upload do seu arquivo .csv para continuar.")
 elif csv:
     st.success("Arquivo .csv carregado com sucesso! 🎉")
+    
+    OPENAI_API_KEY= st.text_input("Digite sua API Key do OpenAI aqui:")
+
+    client = OpenAI(
+        api_key=OPENAI_API_KEY
+    )
     col1, col2 = st.columns(2)
     with col1:
         df_divider = st.selectbox("Qual o tipo de separador utilizado no seu arquivo?", [",", ";"])
@@ -50,6 +46,7 @@ elif csv:
         df_encoding = st.selectbox("Qual o tipo de encoding utilizado no seu arquivo?", ["utf-8", "latin-1", "ISO-8859-9", "Outro"])
         if df_encoding == "Outro":
             df_encoding = st.text_input("Digite o tipo de encoding utilizado no seu arquivo: Ex: utf-8, latin-1, ISO-8859-9, etc.")
+    
 st.divider()
 
 if csv:
