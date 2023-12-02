@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
+@st.cache_data()
 def send_message(message):    
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
