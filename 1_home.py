@@ -43,11 +43,17 @@ if not csv:
     st.warning("Por favor, faça o upload do seu arquivo .csv para continuar.")
 elif csv:
     st.success("Arquivo .csv carregado com sucesso! 🎉")
-    
+    col1, col2 = st.columns(2)
+    with col1:
+        df_divider = st.selectbox("Qual o tipo de separador utilizado no seu arquivo?", [",", ";"])
+    with col2:
+        df_encoding = st.selectbox("Qual o tipo de encoding utilizado no seu arquivo?", ["utf-8", "latin-1", "ISO-8859-9", "Outro"])
+        if df_encoding == "Outro":
+            df_encoding = st.text_input("Digite o tipo de encoding utilizado no seu arquivo: Ex: utf-8, latin-1, ISO-8859-9, etc.")
 st.divider()
 
 if csv:
-    df = pd.read_csv(csv, sep=";", encoding="utf-8")
+    df = pd.read_csv(csv, sep=df_divider, encoding=df_encoding)
     st.write("#### Abaixo, você pode conferir uma prévia dos seus dados:")
     st.dataframe(df.head(5))
 
